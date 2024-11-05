@@ -13,6 +13,7 @@ const Packet = require("./packet");
 const Entity = require("./entity");
 const Log = require("./modules/Logger");
 const GameMode = require("./gamemodes");
+const path = require("node:path");
 
 class GameServer {
     constructor() {
@@ -191,7 +192,7 @@ class GameServer {
         this.wsServer.on("error", this.socketError.bind(this));
         this.wsServer.on("connection", this.socketEvent.bind(this));
         this.httpServer.listen(this.config.serverPort, this.config.serverBind, this.onHttpOpen.bind(this));
-        if (this.config.serverStatsPort > 0) this.startStatsServer(this.config.serverStatsPort);
+        // if (this.config.serverStatsPort > 0) this.startStatsServer(this.config.serverStatsPort);
     }
     onHttpOpen() {
         setTimeout(this.timerLoopBind, 1);
@@ -582,10 +583,10 @@ class GameServer {
         this.updateTime = end[0] * 1000 + end[1] / 1e6;
     }
     massToSize(mass) {
-        return Math.sqrt(100 * mass); 
+        return Math.sqrt(100 * mass);
     }
     sizeToMass(size) {
-        return Math.pow(size, 2) / 100; 
+        return Math.pow(size, 2) / 100;
     }
     updateMerge(cell, client) {
         let time = Math.max(this.config.playerMergeTime, cell._size * .2);
@@ -886,7 +887,7 @@ class GameServer {
         this.addNode(virus);
     }
     loadConfig() {
-        let config = "../src/config.ini";
+        let config = path.join(__dirname, "./config.ini");
         try {
             if (fs.existsSync(config)) {
                 let i = ini.parse(fs.readFileSync(config, "utf-8"));

@@ -3,6 +3,7 @@ const Packet = require("./packet");
 const BinaryReader = require("./packet/BinaryReader");
 const Entity = require("./entity");
 const fs = require("fs");
+const path = require("node:path");
 
 class PacketHandler {
     constructor(gameServer, socket) {
@@ -23,7 +24,7 @@ class PacketHandler {
         this.handler = {
             254: this.onProtocol.bind(this)
         };
-        this.randomSkins = fs.readFileSync("../src/txt/skins.txt", "utf8").split(/[\r\n]+/).filter(x => x !== "");
+        this.randomSkins = fs.readFileSync(path.join(__dirname, "./txt/skins.txt"), "utf8").split(/[\r\n]+/).filter(x => x !== "");
     }
     handleMessage(message) {
         if (this.handler.hasOwnProperty(message[0])) {
